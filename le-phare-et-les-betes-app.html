@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Le Phare et les Bêtes</title>
+<meta name="theme-color" content="#050606">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Le Phare">
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAACbUlEQVR42u3YsQ2DMBBAUZowGTWCPlLGYgOKbMAIkWCDFNnEVEgpoigFCPvyij+A715hu7rUdVKsurYJ2S9nrwAAGmgBDbRgBlpAAw000AIaaMEMtIAGWkADDTTQghloAQ20gAZaQAMNM9ACGmgBDbSABlr/hxlooIEW0EALaKAFM9ACGmiggRbQQAtmoAU00AIaaKCBFsxAC2igBTTQQAMNNMxAC2igBTTQAhpomIEGGmigBTTQAhpowQz0ad3HYfeABjoE5G+wgQa6WMifYAMNdPGQt2AGOgRkoIEOBRlooA/p9ZxPDWagw4AGGWiggRbQQAMNNNBAwww00AIaaKCV5T/0e/YBNNBAC2iggQYaaKCBBhpoAQ000AIaaKCBBhpooIEGWkDv2PKYDst8gQZaQAMNtIAGGmiggQZaQAMNtIAGWkADDTTQQAMtoIEGWkADDTTQQAMNNNBAC2iggRbQQAMNNNBAAw000AIaaKAFNNBAAw000EADDbSABhpoAQ000EADDTTQQAMtoIEGWkADDTTQQAMNNNBAC2iggRbQQAMNNNBAC2iggTYEoIEW0EADDTTQQAtooIEW0EADDTTQQAMNNNACGmigBTTQQAMNNNBAAw20gAYaaAENNNBAAw000EADLaCBBlpAAw000EADDTTQQAtooIEW0EADDTTQQAMNNNACGmigBTTQQAMNNNDmCzTQAhpooAU00EADDTTQAhpooAU00AI6R9C3a5+kKAEtoKVsQbt3yaNQAloCWgJaQEtAS0BLQEtAC2gJaAloCWgJaAEtAS0BLQEtAS2gJaAloCWgJaAFtFRMK52HtHXu7m/RAAAAAElFTkSuQmCC">
+<style>
+:root{color-scheme:dark;--ink:#e9e6dc;--mist:#8c8a81;--line:#5a5951;--void:#050606}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none}
+html,body{height:100%;margin:0;overflow:hidden;background:var(--void);color:var(--ink);font-family:Georgia,'Times New Roman',serif}
+#wrap{position:fixed;inset:0;padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}
+#sea{position:absolute;inset:0;width:100%;height:100%;display:block;background:#050606;image-rendering:pixelated}
+#hud{position:absolute;z-index:2;top:calc(12px + env(safe-area-inset-top,0px));left:14px;right:56px;display:flex;justify-content:space-between;gap:8px;pointer-events:none;text-transform:uppercase;letter-spacing:.14em;font-size:10px}
+.readout{min-width:78px;padding:8px 10px;border:1px solid #ffffff26;background:#050606c9;box-shadow:0 3px 15px #0008}
+.readout small{display:block;margin-bottom:4px;color:var(--mist);font-size:8px;letter-spacing:.18em}
+#pauseBtn{position:absolute;z-index:3;right:12px;top:calc(12px + env(safe-area-inset-top,0px));width:34px;height:34px;border:1px solid var(--line);background:#050606dd;color:var(--ink);font:15px Georgia;cursor:pointer}
+#radarWrap{position:absolute;z-index:2;bottom:calc(12px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);width:140px;padding:6px;background:#050606c9;border:1px solid #77766a66;text-align:center;pointer-events:none}
+#radarTitle{margin:0 0 3px;color:var(--mist);font-size:8px;letter-spacing:.2em;text-transform:uppercase}
+#radar{width:124px;height:124px;display:block;margin:auto;image-rendering:pixelated}
+#controls{position:absolute;z-index:3;left:12px;right:12px;bottom:calc(22px + env(safe-area-inset-bottom,0px));display:flex;justify-content:space-between;pointer-events:none}
+.turnBtn{width:64px;height:64px;border-radius:50%;border:1px solid #aaa89d80;background:#111b;color:var(--ink);font-size:21px;pointer-events:auto;touch-action:none;box-shadow:0 3px 18px #0009}
+.turnBtn:active,.turnBtn.on{background:#eee9dd33;border-color:#e9e6dc}
+.screen{position:absolute;z-index:5;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:17px;padding:24px;background:radial-gradient(ellipse at 50% 42%,#171816f5,#020303f7 74%);text-align:center}
+.hidden{display:none!important}
+.kicker{color:var(--mist);font-size:9px;letter-spacing:.25em;text-transform:uppercase}
+h1{margin:0;font-weight:400;font-size:clamp(30px,7vw,58px);line-height:1.1;letter-spacing:.16em;text-transform:uppercase;text-shadow:0 0 20px #e9e6dc44}
+.subtitle{max-width:440px;margin:0;color:#b5b3a9;font-size:14px;line-height:1.75;letter-spacing:.06em}
+.mainBtn{width:min(82vw,300px);padding:14px;border:1px solid #aaa89d;background:#dedbd0;color:#10100f;font:12px Georgia,serif;letter-spacing:.16em;text-transform:uppercase;cursor:pointer}
+.mainBtn:hover,.mainBtn:focus-visible{outline:2px solid var(--ink);outline-offset:3px;background:#f1eee3}
+.help{max-width:480px;color:#77766e;font-size:11px;line-height:1.9;letter-spacing:.06em}
+@media(max-width:520px){#hud{left:7px;right:46px;top:calc(7px + env(safe-area-inset-top,0px));font-size:8px}.readout{min-width:64px;padding:6px 7px}.readout small{font-size:7px}#pauseBtn{top:calc(7px + env(safe-area-inset-top,0px));right:7px;width:31px;height:31px}#radarWrap{width:116px;padding:4px;bottom:calc(10px + env(safe-area-inset-bottom,0px))}#radar{width:104px;height:104px}#radarTitle{font-size:7px}.turnBtn{width:55px;height:55px}#controls{left:8px;right:8px;bottom:calc(26px + env(safe-area-inset-bottom,0px))}}
+button:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+#hud{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;right:76px}
+.readout{min-width:0}
+@media(max-width:520px){#hud{gap:4px;right:60px}.readout{padding:6px 5px}#hud .readout small{font-size:6px;letter-spacing:.1em}}
+</style>
+</head>
+<body>
+<main id="wrap">
+  <canvas id="sea" aria-label="Vue depuis la salle du phare et faisceau sur la mer"></canvas>
+  <header id="hud" class="hidden">
+    <div class="readout"><small>Bêtes repoussées</small><span id="score">0</span></div>
+    <div class="readout"><small>Brèches</small><span id="breaches">0 / 3</span></div>
+    <div class="readout"><small>Veille</small><span id="clock">60 s</span></div>
+    <div class="readout"><small>Marée</small><span id="wave">I</span></div>
+  </header>
+  <button id="pauseBtn" class="hidden" aria-label="Mettre en pause" title="Pause">Ⅱ</button>
+  <div id="radarWrap" class="hidden"><p id="radarTitle">Radar · échos approchés</p><canvas id="radar" width="124" height="124" aria-label="Radar des bêtes"></canvas></div>
+  <div id="controls" class="hidden" aria-label="Commandes pour orienter le phare">
+    <button id="turnLeft" class="turnBtn" aria-label="Tourner le faisceau vers la gauche">↶</button>
+    <button id="turnRight" class="turnBtn" aria-label="Tourner le faisceau vers la droite">↷</button>
+  </div>
+  <section id="menu" class="screen">
+    <div class="kicker">La dernière veille</div>
+    <h1>Le Phare<br>et les Bêtes</h1>
+    <p class="subtitle">La mer est noire. Des formes approchent du rivage.<br>Garde le faisceau posé sur elles pour les arrêter.</p>
+    <button id="startBtn" class="mainBtn">Allumer le phare</button>
+    <p class="help">&larr; &rarr; ou A / D pour orienter le faisceau sur 180&deg; &middot; rel&acirc;che la touche pour le maintenir<br>Le radar indique approximativement la direction et la distance des b&ecirc;tes.<br>Repousse-les pendant une minute. Trois br&egrave;ches mettent fin &agrave; la veille.</p>
+  </section>
+  <section id="pause" class="screen hidden"><div class="kicker">La mer attend</div><h1>Pause</h1><p class="subtitle">Le faisceau reste immobile.</p><button id="resumeBtn" class="mainBtn">Reprendre la veille</button><button id="restartPause" class="mainBtn">Recommencer</button></section>
+  <section id="end" class="screen hidden"><div class="kicker" id="endKicker">Fin de veille</div><h1 id="endTitle">La nuit retombe</h1><p id="endText" class="subtitle"></p><button id="againBtn" class="mainBtn">Recommencer</button></section>
+</main>
+<script>
+(()=>{
+'use strict';
+const $=id=>document.getElementById(id),canvas=$('sea'),ctx=canvas.getContext('2d'),radar=$('radar'),rctx=radar.getContext('2d');
+const EDGE=405,SAFE=46,BEAM_RANGE=370,BEAM_HALF=.24,BEAM_SPEED=1.75,WIN_TIME=60;
+const keys={left:false,right:false};
+const touchControls='ontouchstart'in window||navigator.maxTouchPoints>0;
+let dpr=1,w=0,h=0,state='menu',last=0,elapsed=0,spawnClock=0,score=0,breaches=0,wave=1,enemies=[],sparks=[];
+let beamAngle=-Math.PI/2;
+function resize(){dpr=Math.min(window.devicePixelRatio||1,2);const r=canvas.getBoundingClientRect();w=r.width;h=r.height;canvas.width=Math.max(1,Math.round(w*dpr));canvas.height=Math.max(1,Math.round(h*dpr));ctx.setTransform(dpr,0,0,dpr,0,0);ctx.imageSmoothingEnabled=false;}
+window.addEventListener('resize',resize);resize();
+function setVisible(id,on){$(id).classList.toggle('hidden',!on);}
+function startGame(){state='playing';elapsed=0;score=0;breaches=0;wave=1;spawnClock=1.35;beamAngle=-Math.PI/2;enemies=[];sparks=[];keys.left=keys.right=false;last=0;setVisible('menu',false);setVisible('end',false);setVisible('pause',false);['hud','pauseBtn','radarWrap'].forEach(id=>setVisible(id,true));setVisible('controls',touchControls);updateHud();}
+function updateHud(){$('score').textContent=score;$('breaches').textContent=breaches+' / 3';$('clock').textContent=Math.max(0,Math.ceil(WIN_TIME-elapsed))+' s';$('wave').textContent=['I','II','III','IV'][Math.min(3,Math.floor(elapsed/15))];}
+function angleGap(a,b){return Math.atan2(Math.sin(a-b),Math.cos(a-b));}
+function spawn(){const a=-Math.PI+Math.random()*Math.PI,r=EDGE+Math.random()*28,kind=Math.random()<.24?'large':'small';enemies.push({x:Math.cos(a)*r,y:Math.sin(a)*r,kind,speed:(kind==='large'?13:19)+Math.min(10,elapsed*.12)+Math.random()*3,exposure:0,lit:false,phase:Math.random()*6});}
+function update(dt){
+  elapsed+=dt;wave=1+Math.floor(elapsed/15);
+  if(keys.left)beamAngle=Math.max(-Math.PI,beamAngle-BEAM_SPEED*dt);if(keys.right)beamAngle=Math.min(0,beamAngle+BEAM_SPEED*dt);
+  spawnClock-=dt;const interval=Math.max(2.5,3.65-elapsed*.019);
+  if(spawnClock<=0&&enemies.length<7){spawn();spawnClock=interval;}
+  for(let i=enemies.length-1;i>=0;i--){const b=enemies[i],dist=Math.hypot(b.x,b.y),a=Math.atan2(b.y,b.x),aim=Math.abs(angleGap(a,beamAngle));
+    b.lit=dist<BEAM_RANGE&&aim<BEAM_HALF;
+    if(b.lit){b.exposure+=dt*(b.kind==='large'?.72:1);b.phase+=dt*7;}
+    else{b.exposure=Math.max(0,b.exposure-dt*.42);const step=b.speed*dt;b.x-=b.x/dist*step;b.y-=b.y/dist*step;b.phase+=dt*2;}
+    if(b.exposure>=(b.kind==='large'?2.35:1.45)){score++;sparks.push({x:b.x,y:b.y,life:.55,max:.55});enemies.splice(i,1);continue;}
+    if(Math.hypot(b.x,b.y)<SAFE){breaches++;sparks.push({x:b.x,y:b.y,life:.7,max:.7});enemies.splice(i,1);if(breaches>=3){finish(false);return;}}
+  }
+  sparks.forEach(s=>s.life-=dt);sparks=sparks.filter(s=>s.life>0);
+  updateHud();if(elapsed>=WIN_TIME){finish(true);}
+}
+function finish(survived){state='end';keys.left=keys.right=false;['hud','pauseBtn','radarWrap','controls'].forEach(id=>setVisible(id,false));setVisible('end',true);
+  $('endKicker').textContent=survived?'La nuit s’achève':'La jetée est submergée';
+  $('endTitle').textContent=survived?'À l’aube':'Le phare s’éteint';
+  $('endText').textContent=survived?`Tu as tenu jusqu’au matin et repoussé ${score} bête${score===1?'':'s'}. La mer se retire.`:`Les bêtes ont franchi la jetée après ${score} repoussée${score===1?'':'s'}. La lumière disparaît sous les vagues.`;
+}
+function draw(){
+  ctx.setTransform(dpr,0,0,dpr,0,0);ctx.fillStyle='#050606';ctx.fillRect(0,0,w,h);
+  if(state!=='menu')drawInterior();
+  if(state==='playing')drawRadar();
+}
+function pointOnArc(a,dist,pivotX,pivotY,radius){
+  const rel=Math.max(-Math.PI/2,Math.min(Math.PI/2,angleGap(a,-Math.PI/2))),r=Math.min(1,dist/EDGE)*radius;
+  return{x:pivotX+r*Math.sin(rel),y:pivotY-r*Math.cos(rel)};
+}
+function drawInterior(){
+  const pivotX=w*.5,pivotY=h*.68,radius=Math.min(w*.47,h*.45),top=pivotY-radius;
+  const sky=ctx.createLinearGradient(0,0,0,top);sky.addColorStop(0,'#020303');sky.addColorStop(.76,'#11120f');sky.addColorStop(1,'#26261f');ctx.fillStyle=sky;ctx.fillRect(0,0,w,h);
+  for(let i=0;i<120;i++){const x=(i*97.31)%Math.max(1,w),y=(i*43.79)%Math.max(1,top*.92);ctx.fillStyle=i%7===0?'#aaa99b88':'#77766e55';ctx.fillRect(Math.floor(x),Math.floor(y),i%9===0?2:1,1);}
+  ctx.save();ctx.beginPath();ctx.moveTo(pivotX,pivotY);ctx.arc(pivotX,pivotY,radius,Math.PI,Math.PI*2);ctx.closePath();ctx.clip();
+  const sea=ctx.createLinearGradient(0,top,0,pivotY);sea.addColorStop(0,'#282920');sea.addColorStop(.22,'#171812');sea.addColorStop(.7,'#090a09');sea.addColorStop(1,'#030404');ctx.fillStyle=sea;ctx.fillRect(pivotX-radius,top,radius*2,radius);
+  for(let ring=radius*.16;ring<radius;ring+=radius*.12){ctx.beginPath();ctx.arc(pivotX,pivotY,ring,Math.PI,Math.PI*2);ctx.strokeStyle=`rgba(190,188,174,${.018+(ring/radius)*.035})`;ctx.lineWidth=1;ctx.stroke();}
+  for(let row=0;row<22;row++){const rel=-Math.PI/2+(row%11)*Math.PI/11,dist=radius*(.22+(row%5)*.13),p=pointOnArc(-Math.PI/2+rel,dist*EDGE/radius,pivotX,pivotY,radius);ctx.fillStyle=`rgba(190,188,174,${.035+(row%4)*.012})`;ctx.fillRect(Math.floor(p.x-8),Math.floor(p.y),12+(row%3)*6,1);}
+  ctx.restore();
+  drawSearchlight(pivotX,pivotY,radius);
+  enemies.forEach(b=>{if(b.lit)drawBeast(b,pivotX,pivotY,radius);});
+  sparks.forEach(s=>drawSpark(s,pivotX,pivotY,radius));
+  drawWindowFrame(pivotX,pivotY,radius);
+  const shade=ctx.createLinearGradient(0,0,w,0);shade.addColorStop(0,'#000b');shade.addColorStop(.12,'#0000');shade.addColorStop(.88,'#0000');shade.addColorStop(1,'#000b');ctx.fillStyle=shade;ctx.fillRect(0,0,w,h);
+}
+function drawSearchlight(pivotX,pivotY,radius){
+  const rel=angleGap(beamAngle,-Math.PI/2),left=Math.max(-Math.PI/2,rel-BEAM_HALF)-Math.PI/2,right=Math.min(Math.PI/2,rel+BEAM_HALF)-Math.PI/2;
+  ctx.save();ctx.beginPath();ctx.moveTo(pivotX,pivotY);ctx.arc(pivotX,pivotY,radius,left,right);ctx.closePath();ctx.clip();
+  const glow=ctx.createRadialGradient(pivotX,pivotY,2,pivotX,pivotY,radius);glow.addColorStop(0,'rgba(242,240,226,.18)');glow.addColorStop(.62,'rgba(236,234,221,.10)');glow.addColorStop(1,'rgba(225,223,211,.03)');ctx.fillStyle=glow;ctx.fillRect(pivotX-radius,pivotY-radius,radius*2,radius);
+  ctx.strokeStyle='#f0edde66';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(pivotX,pivotY);ctx.lineTo(pivotX+radius*Math.cos(left),pivotY+radius*Math.sin(left));ctx.moveTo(pivotX,pivotY);ctx.lineTo(pivotX+radius*Math.cos(right),pivotY+radius*Math.sin(right));ctx.stroke();ctx.restore();
+}
+function drawWindowFrame(pivotX,pivotY,radius){
+  ctx.strokeStyle='#080909';ctx.lineWidth=Math.max(14,w*.018);ctx.beginPath();ctx.arc(pivotX,pivotY,radius+8,Math.PI,Math.PI*2);ctx.stroke();
+  ctx.strokeStyle='#55534a';ctx.lineWidth=2;ctx.beginPath();ctx.arc(pivotX,pivotY,radius,Math.PI,Math.PI*2);ctx.stroke();
+  for(const rel of [-1.05,-.55,.55,1.05]){const theta=rel-Math.PI/2,x=pivotX+radius*Math.cos(theta),y=pivotY+radius*Math.sin(theta);ctx.strokeStyle='#24241f';ctx.lineWidth=Math.max(3,w*.005);ctx.beginPath();ctx.moveTo(pivotX,pivotY);ctx.lineTo(x,y);ctx.stroke();ctx.strokeStyle='#55534a66';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(pivotX+1,pivotY);ctx.lineTo(x+1,y);ctx.stroke();}
+  ctx.fillStyle='#111210';ctx.fillRect(pivotX-radius-14,pivotY,radius*2+28,h*.11);ctx.fillStyle='#4a4941';ctx.fillRect(pivotX-radius-14,pivotY,radius*2+28,Math.max(7,h*.014));ctx.fillStyle='#292923';ctx.fillRect(pivotX-radius-14,pivotY+Math.max(7,h*.014),radius*2+28,3);
+  for(let x=pivotX-radius-10;x<pivotX+radius;x+=Math.max(42,w/12)){ctx.fillStyle='#23231f';ctx.fillRect(x,pivotY+Math.max(11,h*.022),Math.max(24,w/16),h*.035);ctx.fillStyle='#38372f';ctx.fillRect(x+2,pivotY+Math.max(14,h*.028),Math.max(16,w/24),1);}
+  ctx.fillStyle='#302f29';ctx.fillRect(pivotX-10,pivotY-4,20,8);ctx.fillStyle='#ece9dc';ctx.fillRect(pivotX-3,pivotY-5,6,5);ctx.fillStyle='#aaa89d';ctx.fillRect(pivotX-1,pivotY-3,2,3);
+}
+function drawBeast(b,pivotX,pivotY,radius){
+  const dist=Math.hypot(b.x,b.y),p=pointOnArc(Math.atan2(b.y,b.x),dist,pivotX,pivotY,radius),depth=Math.max(0,Math.min(1,1-dist/EDGE));
+  const unit=1.4+depth*3.6,size=unit*(b.kind==='large'?1.5:1);
+  const pixels=['0011100','0111110','1111111','1101011','1111111','0110110','0100010'];
+  ctx.save();ctx.translate(p.x,p.y+Math.sin(b.phase)*size*.15);ctx.globalAlpha=.55+.4*Math.min(1,b.exposure/(b.kind==='large'?2.35:1.45));
+    const halo=ctx.createRadialGradient(0,0,1,0,0,size*10);halo.addColorStop(0,'rgba(244,242,228,.42)');halo.addColorStop(1,'rgba(230,228,214,0)');ctx.fillStyle=halo;ctx.fillRect(-size*10,-size*9,size*20,size*18);
+    ctx.fillStyle='#dedcd1';pixels.forEach((row,iy)=>{for(let ix=0;ix<row.length;ix++)if(row[ix]==='1')ctx.fillRect((ix-3.5)*size,(iy-3.5)*size,size,size);});
+    ctx.fillStyle='#090a09';ctx.fillRect(-size*1.7,-size*.6,size,size);ctx.fillRect(size*.7,-size*.6,size,size);
+  ctx.restore();
+}
+function drawSpark(s,pivotX,pivotY,radius){
+  const life=s.life/s.max,p=pointOnArc(Math.atan2(s.y,s.x),Math.hypot(s.x,s.y),pivotX,pivotY,radius);
+  ctx.strokeStyle=`rgba(240,238,228,${life*.8})`;ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(p.x,p.y,(1-life)*16+2,0,Math.PI*2);ctx.stroke();
+}
+function drawRadar(){
+  const rw=radar.width,rh=radar.height,c=rw/2,R=rw*.43;rctx.clearRect(0,0,rw,rh);rctx.fillStyle='#070808';rctx.fillRect(0,0,rw,rh);
+  rctx.strokeStyle='#d4d1c733';rctx.lineWidth=1;
+  for(let k=1;k<=3;k++){rctx.beginPath();rctx.arc(c,c,R*k/3,0,Math.PI*2);rctx.stroke();}
+  rctx.beginPath();rctx.moveTo(c-R,c);rctx.lineTo(c+R,c);rctx.moveTo(c,c-R);rctx.lineTo(c,c+R);rctx.stroke();
+  const sweep=(elapsed*1.8)%(Math.PI*2);rctx.strokeStyle='#e9e6dc77';rctx.beginPath();rctx.moveTo(c,c);rctx.lineTo(c+Math.cos(sweep)*R,c+Math.sin(sweep)*R);rctx.stroke();
+  rctx.fillStyle='#e9e6dc';rctx.fillRect(c-2,c-2,4,4);
+  enemies.forEach(b=>{const rr=Math.hypot(b.x,b.y),a=Math.atan2(b.y,b.x),d=Math.min(1,rr/EDGE)*R,x=c+Math.cos(a)*d,y=c+Math.sin(a)*d;rctx.fillStyle=b.lit?'#fff':'#b7b5aa';rctx.fillRect(Math.round(x-1.5),Math.round(y-1.5),3,3);});
+  rctx.fillStyle='#85837a';rctx.font='7px Georgia';rctx.textAlign='center';rctx.fillText('N',c,9);
+}
+function loop(ts){if(!last)last=ts;const dt=Math.min((ts-last)/1000,.05);last=ts;if(state==='playing')update(dt);draw();requestAnimationFrame(loop);}
+function keyChange(e,on){const k=e.key.toLowerCase();if(['arrowleft','a','arrowright','d'].includes(k))e.preventDefault();if(k==='arrowleft'||k==='a')keys.left=on;if(k==='arrowright'||k==='d')keys.right=on;if(on&&k==='escape'){if(state==='playing')pause();else if(state==='paused')resume();}}
+function pause(){state='paused';keys.left=keys.right=false;setVisible('pauseBtn',false);setVisible('pause',true);}
+function resume(){state='playing';setVisible('pause',false);setVisible('pauseBtn',true);last=0;}
+window.addEventListener('keydown',e=>keyChange(e,true));window.addEventListener('keyup',e=>keyChange(e,false));window.addEventListener('blur',()=>keys.left=keys.right=false);
+function bindHold(button,key){const down=e=>{e.preventDefault();keys[key]=true;button.classList.add('on');},up=e=>{e.preventDefault();keys[key]=false;button.classList.remove('on');};button.addEventListener('pointerdown',e=>{button.setPointerCapture?.(e.pointerId);down(e);});button.addEventListener('pointerup',up);button.addEventListener('pointercancel',up);button.addEventListener('lostpointercapture',up);}
+bindHold($('turnLeft'),'left');bindHold($('turnRight'),'right');
+$('startBtn').onclick=startGame;$('againBtn').onclick=startGame;$('restartPause').onclick=()=>{setVisible('pause',false);startGame();};$('pauseBtn').onclick=pause;$('resumeBtn').onclick=resume;
+if(touchControls)setVisible('controls',true);
+requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
